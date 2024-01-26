@@ -79,9 +79,6 @@ struct NetworkManager {
                 completion(.failure(.invalidResponse))
                 return
             }
-//            if let jsonString = String(data: data, encoding: .utf8) {
-//                    print(jsonString)
-//            }
             if T.self == String.self {
                 if let responseString = String(data: data, encoding: .utf8) {
                     completion(.success(responseString as! T))

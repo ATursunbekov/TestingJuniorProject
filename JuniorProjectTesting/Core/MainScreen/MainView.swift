@@ -16,6 +16,12 @@ class MainView: UIView {
         return image
     }()
     
+    lazy var refreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.tintColor = .white
+        return refresh
+    }()
+    
     lazy var searchBar: CustomSearchBar = CustomSearchBar()
     
     lazy var tableView: UITableView = {
@@ -39,6 +45,11 @@ class MainView: UIView {
         addSubview(bgImage)
         addSubview(searchBar)
         addSubview(tableView)
+        if #available(iOS 10.0, *) {
+            tableView.refreshControl = refreshControl
+        } else {
+            tableView.addSubview(refreshControl)
+        }
         
         bgImage.snp.makeConstraints { make in
             make.edges.equalToSuperview()

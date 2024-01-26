@@ -26,7 +26,7 @@ class MainViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         setupDelegates()
         viewModel.fetchCoins()
-        viewModel.delegate = self
+        setupTargets()
     }
     
     override func viewIsAppearing(_ animated: Bool) {
@@ -41,6 +41,7 @@ class MainViewController: UIViewController, UITextFieldDelegate {
         mainView.tableView.delegate = self
         mainView.tableView.dataSource = self
         mainView.searchBar.textField.delegate = self
+        viewModel.delegate = self
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
@@ -58,6 +59,18 @@ class MainViewController: UIViewController, UITextFieldDelegate {
                 coin.symbol.lowercased().contains(searchText.lowercased())
             }
             mainView.tableView.reloadData()
+        }
+    }
+    
+    func setupTargets() {
+        mainView.refreshControl.addTarget(self, action: #selector(refresh(_:)), for: .valueChanged)
+    }
+    
+    @objc func refresh(_ sender: AnyObject) {
+        viewModel.fetchCoins()
+        mainView.tableView.reloadData()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.mainView.refreshControl.endRefreshing()
         }
     }
 }
